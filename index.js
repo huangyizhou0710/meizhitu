@@ -3,7 +3,7 @@ const decrypt = require("./decrypt.js");
 const download = require("./download.js");
 const { JSDOM } = require("jsdom");
 
-async function main(id) {
+async function getImages(id) {
   try {
     const res = await getImageArr(id);
     const listArr = decrypt(id, res.data.data);
@@ -43,16 +43,17 @@ async function getBeauty(page = 1) {
     links.forEach((link) => {
       urls.push(link.href);
     });
-    const beautyIds = urls
+    let beautyIds = urls
       .filter((url) => url.startsWith("https://kkmzt.com/beauty/"))
       .map((url) => {
         const match = url.match(/https:\/\/kkmzt\.com\/beauty\/(\d+)/);
         return match ? match[1] : null;
       })
       .filter((id) => id !== null);
+    beautyIds = [...new Set(beautyIds)];
     let i = 0;
     while(i < beautyIds.length) {
-      await main(beautyIds[i]);
+      await getImages(beautyIds[i]);
       i++;
     }
     console.log(`潮牌管第${page}页数据已全部下载完毕`)
@@ -61,5 +62,5 @@ async function getBeauty(page = 1) {
   }
 }
 
-// main('108366')
+// getImages('108366')
 getBeauty();
