@@ -2,6 +2,9 @@ const { getImageArr, getBeautyPage } = require("./request.js");
 const decrypt = require("./decrypt.js");
 const download = require("./download.js");
 const { JSDOM } = require("jsdom");
+const fs = require("fs");
+
+var isBeautyFinished = false;
 
 async function getImages(id) {
   try {
@@ -25,12 +28,13 @@ async function getImages(id) {
       }
     );
   } catch(error) {
-    console.error("获取图集失败");
+    console.error("获取图集失败", error);
   }
 }
 
 async function getBeauty(page = 1) {
   try {
+    console.log(`开始加载潮牌馆第${page}页数据...`)
     const res = await getBeautyPage(page);
     // 使用DOMParser解析HTML文档
     const dom = new JSDOM(res.data);
@@ -52,15 +56,62 @@ async function getBeauty(page = 1) {
       .filter((id) => id !== null);
     beautyIds = [...new Set(beautyIds)];
     let i = 0;
+    console.log('开始下载图片...')
     while(i < beautyIds.length) {
       await getImages(beautyIds[i]);
       i++;
     }
-    console.log(`潮牌管第${page}页数据已全部下载完毕`)
+    console.log(`潮牌馆第${page}页数据已全部下载完毕\n`)
   } catch (error) {
-    console.error("获取文档数据出错:");
+    if(error?.response?.status === 404) {
+      console.log("潮牌馆图片已全部下载完毕");
+      isBeautyFinished = true;
+    } else if (error?.response?.status === 403) { 
+      console.log('403限制访问')
+      isBeautyFinished = true;
+    } else if (error?.response?.status === 429) {
+      console.log('429限制访问')
+      isBeautyFinished = true;
+    }
+    else {
+      console.log("获取文档数据出错:", error);
+    }
+  }
+}
+
+// 判断是否存在images/beauty 以及 images/photo文件夹，若没有则创建
+function mkdir() {
+  const localPath = {
+    'beauty': `./images/beauty`,
+    'photo': `./images/photo`
+  }
+  // 判断该文件夹是否存在，若不存在，则创建
+  if (!fs.existsSync('./images')) {
+    fs.mkdirSync('./images');
+  }
+  if (!fs.existsSync(localPath.beauty)) {
+    fs.mkdirSync(localPath.beauty);
+  }
+  if (!fs.existsSync(localPath.photo)) {
+    fs.mkdirSync(localPath.photo);
+  }
+}
+
+// 延迟函数，用于等待指定的毫秒数
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function main() {
+  mkdir()
+  // 下载潮拍馆的所有图片资源
+  let i = 1;
+  while(isBeautyFinished === false) {
+    await getBeauty(i);
+    await delay(15000);
+    i++;
   }
 }
 
 // getImages('108366')
-getBeauty();
+main()

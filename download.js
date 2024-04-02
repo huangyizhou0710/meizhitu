@@ -1,4 +1,4 @@
-const axios = require('axios');
+const axios = require('./axios.js')
 const fs = require('fs');
 
 // 创建一个https agent并禁用SSL证书验证
@@ -20,12 +20,12 @@ module.exports = function download(imageName, type = 'beauty', params = { year: 
   }
 
   // 判断localPath中是否有存在同名的图片了，若有则放回
-  // if (fs.existsSync(localPath[type] + '/' + imageName )) {
-  //   // console.log(`${imageName}已存在本地目录中`);
-  //   return new Promise((resolve, reject) => {
-  //     resolve(imageName)
-  //   });
-  // }
+  if (fs.existsSync(localPath[type] + '/' + imageName )) {
+    // console.log(`${imageName}已存在本地目录中`);
+    return new Promise((resolve, reject) => {
+      resolve(imageName)
+    });
+  }
 
   // 使用axios下载图片
   return axios({
