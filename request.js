@@ -8,6 +8,7 @@ var proxy = {
 
 var maxCount = 10;
 
+// 从ip池随机获取一个ip
 async function getIpTool() {
   try {
     proxy = {
@@ -30,6 +31,7 @@ async function getIpTool() {
   }
 }
 
+// 从ip池删除某个ip
 async function deleteProxy(proxy) {
   try {
     const res = await instance.get(
@@ -41,6 +43,7 @@ async function deleteProxy(proxy) {
   }
 }
 
+// 获取图集里的图片路径数组
 function getImageArr(id) {
   return new Promise(async (resolve, reject) => {
     let retry_count = 0;
@@ -102,6 +105,7 @@ function getImageArr(id) {
   });
 }
 
+// 获取潮牌馆HTML页面
 function getBeautyPage(page = 1) {
   const url =
     page > 1
