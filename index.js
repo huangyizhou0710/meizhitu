@@ -8,7 +8,9 @@ var isBeautyFinished = false;
 
 async function getImages(id) {
   try {
+    console.log(`开始获取图集${id}的数组路径`)
     const res = await getImageArr(id);
+    console.log(`获取完成图集${id}的数组路径`)
     const listArr = decrypt(id, res.data.data);
     return Promise.all(
       listArr.map((item, index) => {
@@ -28,7 +30,15 @@ async function getImages(id) {
       }
     );
   } catch(error) {
-    console.error("获取图集失败", error);
+    if(error?.response?.status === 403) {
+      console.log('403限制访问')
+      isBeautyFinished = true;
+    } else if (error?.response?.status === 429) {
+      console.log('429限制访问')
+      isBeautyFinished = true;
+    } else {
+      console.error("获取图集失败", error);
+    }
   }
 }
 
@@ -105,10 +115,10 @@ function delay(ms) {
 async function main() {
   mkdir()
   // 下载潮拍馆的所有图片资源
-  let i = 1;
+  let i = 276;
   while(isBeautyFinished === false) {
     await getBeauty(i);
-    await delay(15000);
+    await delay(1000);
     i++;
   }
 }

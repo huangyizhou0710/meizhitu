@@ -1,16 +1,42 @@
-const axios = require('axios');
-const {HttpsProxyAgent} = require("https-proxy-agent");
+const axios = require('axios-https-proxy-fix');
 
-// 隧道域名和端口
-let tunnelHost = 'a614.kdltps.com'
-let tunnelPort = '15818'
-
-// 配置用户名和密码
-let username = 't11206769975756'
-let password = 'k3vkg983'
+// 定义代理列表
+// const proxies = [
+//   // {
+//   //   ip: '',
+//   //   port: ''
+//   // }
+// ];
 
 // 创建一个axios实例
+
 module.exports = axios.create({
-  httpAgent: new HttpsProxyAgent(`http://${username}:${password}@${tunnelHost}:${tunnelPort}`),
-  httpsAgent: new HttpsProxyAgent(`http://${username}:${password}@${tunnelHost}:${tunnelPort}`),
+  // proxy: {
+  //   host: '27.76.103.205', // 代理服务器的主机地址
+  //   port: 4004, // 代理服务器的端口号
+  //   // 协议
+  //   // protocol: 'http', // 代理服务器的协议
+  // },
 });
+
+// 请求拦截器，在每个请求前设置代理
+// instance.interceptors.request.use(function(config) {
+//   // config.proxy = false; // 禁用全局代理
+//   // config.proxy = {
+//   //     host: '45.90.218.215',
+//   //     port: 4444 // 代理端口，根据实际情况修改
+//   // };
+//   return config;
+// }, function (error) {
+// });
+
+// instance.interceptors.response.use(function (response) {
+//   // Do something with response data
+//   return response;
+// }, function (error) {
+//   // Do something with response error
+//   console.log(error)
+//   return Promise.reject(error);
+// });
+
+// module.exports = instance;
