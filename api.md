@@ -3,6 +3,7 @@ GET https://kkmzt.com/beauty/
 
 3. 潮拍馆主页 获取套图id（通过dom获取）
 GET https://kkmzt.com/beauty/
+GET https://kkmzt.com/beauty/page/${page}
 
 4. 潮拍馆套图详情页面
 GET https://kkmzt.com/beauty/${id}  
@@ -40,4 +41,47 @@ i. https://image.baidu.com/search/down?url=https://wx1.sinaimg.cn/mw1024/${image
 ii. https://p.meizitu.net/${YYYY}/${MM}/${imgName}  （写真馆） 
 
 6. 写真馆主页 获取套图id（通过dom获取）
-https://kkmzt.com/photo/
+GET https://kkmzt.com/photo/
+GET https://kkmzt.com/photo/page/${page}
+const response = await axios.get('https://kkmzt.com/photo/page/2/', {
+  headers: {
+    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'accept-language': 'zh-CN,zh;q=0.9',
+    'cookie': '_ga=GA1.1.817224944.1712020496; _ga_J74WJ3FL3J=GS1.1.1712416472.12.1.1712416507.0.0.0',
+    'referer': 'https://kkmzt.com/photo/',
+    'sec-ch-ua': '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"macOS"',
+    'sec-fetch-dest': 'document',
+    'sec-fetch-mode': 'navigate',
+    'sec-fetch-site': 'same-origin',
+    'sec-fetch-user': '?1',
+    'upgrade-insecure-requests': '1',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36'
+  }
+});
+
+7. 写真馆套图详情页面(dom)
+GET https://kkmzt.com/photo/${id}  
+const response = await axios.get('https://kkmzt.com/photo/104076', {
+  headers: {
+    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'accept-language': 'zh-CN,zh;q=0.9',
+    'cookie': '_ga=GA1.1.817224944.1712020496; _ga_J74WJ3FL3J=GS1.1.1712416472.12.1.1712416516.0.0.0',
+    'referer': 'https://kkmzt.com/photo/page/2/',
+    'sec-ch-ua': '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"macOS"',
+    'sec-fetch-dest': 'document',
+    'sec-fetch-mode': 'navigate',
+    'sec-fetch-site': 'same-origin',
+    'sec-fetch-user': '?1',
+    'upgrade-insecure-requests': '1',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36'
+  }
+});
+
+var imgSrc = document.getElementsByTagName('figure')[0].querySelector('img').getAttribute('src')
+var strArr = "https://p.meizitu.net/2024/01/02v02hmdyz.jpg".match(/https:\/\/p\.meizitu\.net\/(\d+)\/(\d+)/)
+var year = strArr[1]
+var month = strArr[2]
