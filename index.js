@@ -222,12 +222,30 @@ async function photo() {
   return true;
 }
 
+function concantTime(second) {
+  if(second <60) {
+    return `${second}秒`;
+  }
+  if(second < 3600) {
+    return `${Math.floor(second/60)}分${second%60}秒`;
+  }
+  if(second < 86400) {
+    return `${Math.floor(second/3600)}小时${second%3600}秒`;
+  }
+  return `${Math.floor(second/86400)}天${second%86400}秒`;
+}
+
 async function main() {
+  let beginTime = parseInt(new Date().getTime()/1000);
   mkdir();
   // 下载潮拍馆的所有图片资源
-  // await beauty();
+  await beauty();
+  // 下载写真馆的所有图片资源
   await photo();
+  let endTime = parseInt(new Date().getTime()/1000);
+  let time = endTime - beginTime;
   console.log("所有图片资源下载完毕");
+  console.log(`总共下载了${concantTime(time)}`);
 }
 
 // getImages('108366')
